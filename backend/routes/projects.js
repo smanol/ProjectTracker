@@ -11,11 +11,12 @@ router.route('/add').post((req, res) => {
   const title = req.body.title;
   const short = req.body.short;
   const authority = req.body.authority;
-  const details = req.body.details;
+  const description = req.body.description;
   const icode = Number(req.body.icode);
   const startDate = Date.parse(req.body.startDate);
-  const endDate = Date.parse(req.body.endDate);
+  const endDate =Date.parse(req.body.endDate)?  Date.parse(req.body.endDate) :null;
   const category = req.body.category;
+
   const company = req.body.company;
   const pay =  Number(req.body.pay);
   const percentage =  Number(req.body.percentage);
@@ -25,7 +26,7 @@ router.route('/add').post((req, res) => {
     title,
     short,
     authority,
-    details,
+    description,
     icode,
     startDate,
     endDate,
@@ -34,6 +35,7 @@ router.route('/add').post((req, res) => {
     pay,
     percentage
   });
+
 
   newProject.save()
   .then(() => res.json('Project added!'))
@@ -58,10 +60,11 @@ router.route('/update/:id').post((req, res) => {
         project.title = req.body.title;
         project.short = req.body.short;
         project.authority = req.body.authority;
-        project.details = req.body.details;
+        project.description = req.body.description;
         project.icode = Number(req.body.icode);
         project.startDate = Date.parse(req.body.startDate);
-        project.endDate = Date.parse(req.body.endDate);
+        project.endDate = Date.parse(req.body.endDate)?  Date.parse(req.body.endDate) :null;
+        
         project.category = req.body.category;
         project.company = req.body.company;
         project.pay =  Number(req.body.pay);

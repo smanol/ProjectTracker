@@ -1,5 +1,5 @@
 import React,  {Component} from 'react';
-
+import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -16,7 +16,7 @@ export default class CreateProject extends Component {
 
         this.onChangeAuthority = this.onChangeAuthority.bind(this);
 
-        this.onChangeDetails = this.onChangeDetails.bind(this);
+        this.onChangeDescription = this.onChangeDescription.bind(this);
 
         this.onChangeIcode = this.onChangeIcode.bind(this);
 
@@ -38,10 +38,10 @@ export default class CreateProject extends Component {
             title: '',                 
             short: '',
             authority: '',
-            details: '',
+            description: '',
             icode: 0,
             startDate: new Date(),
-            endDate: "",
+            endDate: 0,
             category: '',
             company: '',
             pay: 0,
@@ -51,9 +51,13 @@ export default class CreateProject extends Component {
     }
 
     componentDidMount() {
-        this.setState({
-            companies: ['test company'],
-            company: 'test company'
+        axios.get('http://localhost:5000/companies/').then( response => {
+            if (response.data.length > 0) {
+                this.setState( {
+                    companies: response.data.map((comp) => comp.name),
+                    company: response.data[0].name
+                })
+            }
         })
     }
 
@@ -74,9 +78,9 @@ export default class CreateProject extends Component {
             authority: e.target.value
         });
     }
-    onChangeDetails(e) {
+    onChangeDescription(e) {
         this.setState({
-            details: e.target.value
+            description: e.target.value
         });
     }
     onChangeIcode(e) {
@@ -121,17 +125,23 @@ export default class CreateProject extends Component {
             title: this.state.title,
             short: this.state.short,
             authority: this.state.authority,
-            details: this.state.details,
+            description: this.state.description,
             icode: this.state.icode,
             startDate: this.state.startDate,
             endDate: this.state.endDate,
             category: this.state.category,
             company: this.state.company,
             pay: this.state.pay,
-            percentag: this.state.percentage
+            percentage: this.state.percentage
         }
 
+        
+
         console.log(project);
+
+        axios.post('http://localhost:5000/projects/add', project)
+        .then(res => console.log(res.data));
+
         window.location = '/';
     }
 
