@@ -168,7 +168,7 @@ export default class EditProject extends Component {
         axios.post('http://localhost:5000/projects/update/' + this.props.match.params.id, project)
         .then(res => console.log(res.data));
 
-        // window.location = '/';
+        window.location = '/';
     }
 
     render() {
