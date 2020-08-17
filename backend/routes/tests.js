@@ -18,10 +18,10 @@ router.route('/add').post((req, res) => {
   const endDate =Date.parse(req.body.endDate)?  Date.parse(req.body.endDate) :null;
   const projectTeams = req.body.projectTeams.map((pt)=>{
       return {
-        category: pt.category,
+        category:  Number(pt.category),
         company: pt.company,
-        pay:  pt.pay,
-        percentage: pt.percentage
+        pay:  Number(pt.pay),
+        percentage: Number(pt.percentage)
       }
   })
 

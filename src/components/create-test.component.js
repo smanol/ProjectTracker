@@ -2,26 +2,61 @@ import React,  {Component} from 'react';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import { Link } from 'react-router-dom';
 import CurrencyInput from 'react-currency-input';
 import NumberFormat from 'react-number-format';
+import CurrencyFormat from 'react-currency-format';
 
 
-const BASE_URL = process.env.REACT_APP_BASE_URL;
+// const BASE_URL = process.env.REACT_APP_BASE_URL;
 
+const categories =  
+        [
+            "1. Χωροταξικές και Ρυθμιστικές Μελέτες",
+            "2. Πολεοδομικές και Ρυμοτομικές Μελέτες",
+            "3. Μελέτες Οικονομικές",
+            "4. Μελέτες Κοινωνικές",
+            "5. Μελέτες οργανώσεως και επιχειρησιακής έρευνας",
+            "6. Αρχιτεκτονικές Μελέτες Κτιριακών Έργων",
+            "7. Ειδικές Αρχιτεκτονικές Μελέτες",
+            "8. Στατικές Μελέτες",
+            "9. Ηλεκτρομηχανολογικές Μελέτες",
+            "10. Μελέτες Συγκοινωνιακών Έργων",
+            "11. Μελέτες Λιμενικών Έργων",
+            "12. Μελέτες Μεταφορικών Μέσων",
+            "13. Μελέτες Υδραυλικών Έργων",
+            "14. Ενεργειακές Μελέτες",
+            "15. Μελέτες Βιομηχανιών.",
+            "16. Μελέτες Τοπογραφίας",
+            "17. Χημικές Μελέτες και Έρευνες",
+            "18. Χημικοτεχνικές Μελέτες",
+            "19. Μεταλλευτικές Μελέτες και Έρευνες",
+            "20. Γεωλογικές Μελέτες και Έρευνες",
+            "21. Γεωτεχνικές Μελέτες και Έρευνες",
+            "22. Εδαφολογικές Μελέτες και Έρευνες",
+            "23. Γεωργικές Μελέτες",
+            "24. Μελέτες Δασικές",
+            "25. Φυτοτεχνικές Μελέτες ",
+            "26. Μελέτες Αλιευτικές",
+            "27. Περιβαλλοντικές Μελέτες",
+            "28. Μελέτες Πληροφορικής και Δικτύων"
+        ]
 
 const ProjectTeam = props => (
 
     <tr>
-    <td>{props.projectTeam.category}</td>
-    <td>{props.projectTeam.company}</td>
-    <td>{props.projectTeam.pay}</td>
-    <td>{props.projectTeam.percentage}</td>
-    <td>
-  
-   <a href="#" onClick={() => { props.deleteProjectTeam(props.projectTeam.category, props.projectTeam.company) }}>delete</a>
+    <td style={{width: "30%"}}>{categories[props.projectTeam.category-1]}</td>
+    <td style={{width: "30%"}}>{props.projectTeam.company}</td>
+    <td style={{width: "15%"}}>{props.projectTeam.percentage} %</td>
+    <td style={{width: "15%"}}><CurrencyFormat value={props.projectTeam.pay} displayType={'text'} decimalSeparator=',' thousandSeparator='.' suffix=' &euro;' renderText={value => 
+    <div>{value}</div>} />
     </td>
-  </tr>
+    <td style={{width: "15%", }}>
+  
+    <a href="/#" onClick={() => { props.deleteProjectTeam(props.projectTeam.category, props.projectTeam.company) }}>delete</a>
+    </td>
+
+
+    </tr>
   )
 
 export default class CreateTest extends Component {
@@ -29,6 +64,7 @@ export default class CreateTest extends Component {
         super(props)
 
         this.onChangeTitle = this.onChangeTitle.bind(this);
+
         this.deleteProjectTeam = this.deleteProjectTeam.bind(this)
 
         this.onChangeShort = this.onChangeShort.bind(this);
@@ -60,43 +96,16 @@ export default class CreateTest extends Component {
             short: '',
             authority: '',
             description: '',
-            icode: null,
+            icode: '',
             startDate: new Date(),
-            endDate: null,
+            endDate: '',
             category: '',
             company: '',
-            pay: 12500,
-            percentage: 100 ,
+            pay: '',
+            percentage: '100 %' ,
             companies: [],
             projectTeams:[],
-            categories: ["1. Χωροταξικές και Ρυθμιστικές Μελέτες",
-            "2. Πολεοδομικές και Ρυμοτομικές Μελέτες",
-            "3. Μελέτες Οικονομικές",
-            "4. Μελέτες Κοινωνικές",
-            "5. Μελέτες οργανώσεως και επιχειρησιακής έρευνας",
-            "6. Αρχιτεκτονικές Μελέτες Κτιριακών Έργων",
-            "7. Ειδικές Αρχιτεκτονικές Μελέτες",
-            "8. Στατικές Μελέτες",
-            "9. Ηλεκτρομηχανολογικές Μελέτες",
-            "10. Μελέτες Συγκοινωνιακών Έργων",
-            "11. Μελέτες Λιμενικών Έργων",
-            "12. Μελέτες Μεταφορικών Μέσων",
-            "13. Μελέτες Υδραυλικών Έργων",
-            "14. Ενεργειακές Μελέτες",
-            "15. Μελέτες Βιομηχανιών.",
-            "16. Μελέτες Τοπογραφίας",
-            "17. Χημικές Μελέτες και Έρευνες",
-            "18. Χημικοτεχνικές Μελέτες",
-            "19. Μεταλλευτικές Μελέτες και Έρευνες",
-            "20. Μελέτες και Έρευνες Γεωλογικές Υδρογεωλογικές και Γεωφυσικές",
-            "21. Γεωτεχνικές Μελέτες και Έρευνες",
-            "22. Εδαφολογικές Μελέτες και Έρευνες",
-            "23. Γεωργικές Μελέτες",
-            "24. Μελέτες Δασικές",
-            "25. Μελέτες φυτοτεχνικής διαμόρφωσης περιβάλλοντος χώρου και έργων πρασίνου",
-            "26. Μελέτες Αλιευτικές",
-            "27. Περιβαλλοντικές Μελέτες",
-            "28. Μελέτες Πληροφορικής και Δικτύων",]    
+                
 
         }
     }
@@ -111,7 +120,6 @@ export default class CreateTest extends Component {
             }
         })
     }
-
 
 
     onChangeTitle(e) {
@@ -196,10 +204,10 @@ export default class CreateTest extends Component {
     onAddTeam(){
 
         let projectTeam = {
-            category: this.state.category,
+            category: parseInt(this.state.category),
             company: this.state.company,
-            pay: this.state.pay,
-            percentage: this.state.percentage,
+            pay: parseFloat(this.state.pay.replace(/\./g,'').replace(',', '.')),
+            percentage:  parseInt(this.state.percentage),
         }
 
         if (Boolean(projectTeam.category) && Boolean(projectTeam.company) && Boolean(projectTeam.pay) && Boolean(projectTeam.percentage)){
@@ -210,7 +218,7 @@ export default class CreateTest extends Component {
             category: '',
             company: this.state.companies[0],
             pay: '',
-            percentage: "100 %"
+            percentage: '100 %'
           }, 
           () => console.log(this.state.projectTeams))}
 
@@ -275,7 +283,7 @@ export default class CreateTest extends Component {
                 <div className="col-sm-3">
                     <label>Ilida Code: </label>
                     <input 
-                        type="text" 
+                        type="text" pattern="[0-9]*"
                         className="form-control"
                         value={this.state.icode}
                         onChange={this.onChangeIcode}
@@ -292,7 +300,7 @@ export default class CreateTest extends Component {
                     </div>
                     <div className="col-sm-3"> 
                     <label>State: </label>
-                    <select ref="stateInput"
+                    <select ref={this.stateInput}
                         required
                         className="form-control">
                             <option>Διαγωνισμός</option>
@@ -336,10 +344,7 @@ export default class CreateTest extends Component {
                         onChange={this.onChangeDescription}
                         />
                     </div>
-
-
-
-{/*row*/}
+                        {/*row*/}
                     <div className="form-group row"> 
                     <div className="col-sm-3"> 
                     <label>Category: </label>
@@ -350,7 +355,7 @@ export default class CreateTest extends Component {
                         onChange={this.onChangeCategory}
                         >
 
-        {this.state.categories.map((category)=>{return <option>{category}</option>})}
+        {categories.map((category)=>{return <option key={parseInt(category)} >{category}</option>})}
 
 
 
@@ -359,7 +364,7 @@ export default class CreateTest extends Component {
                     </div>
                     <div className="col-sm-4"> 
                     <label>Company: </label>
-                    <select ref="companyInput"
+                    <select ref={this.companyInput}
                         required
                         className="form-control"
                         value={this.state.company}
@@ -373,13 +378,6 @@ export default class CreateTest extends Component {
                             })
                         }
                     </select>
-                    </div>
-                    <div className="col-sm-2">
-                    <label>Pay: </label>
-
-
-                    <CurrencyInput decimalSeparator="," thousandSeparator="." suffix="&euro;" className="form-control" value={this.state.pay} onChangeEvent={this.onChangePay}/>
-
                     </div>
                     <div className="col-sm-2">
                     <label>Percentage: </label>
@@ -402,6 +400,14 @@ export default class CreateTest extends Component {
                         />
                     </div>
 
+                    <div className="col-sm-2">
+                    <label>Pay: </label>
+
+
+                    <CurrencyInput decimalSeparator="," thousandSeparator="." suffix="&euro;" className="form-control" value={this.state.pay} onChangeEvent={this.onChangePay}/>
+
+                    </div>
+                    
 
                     <div className="col-sm-1">
                     <label>Action: </label>

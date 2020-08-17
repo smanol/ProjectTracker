@@ -10,6 +10,7 @@ export default class EditProject extends Component {
     constructor(props) {
         super(props)
 
+
         this.onChangeTitle = this.onChangeTitle.bind(this);
 
         this.onChangeShort = this.onChangeShort.bind(this);
@@ -255,7 +256,7 @@ export default class EditProject extends Component {
 
                     <div className="form-group"> 
                     <label>Company: </label>
-                    <select ref="companyInput"
+                    <select ref={this.companyInput}
                         required
                         className="form-control"
                         value={this.state.company}

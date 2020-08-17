@@ -5,9 +5,9 @@ const Schema = mongoose.Schema;
 
 const projectTeam = new Schema( {
     
-    category: {type: String, required: true},
+    category: {type: Number, required: true},
     company: { type: String, required: true },
-    pay: { type: String, required: true },
+    pay: { type: Number, required: true },
     percentage: { type: Number, required: true }
         
 })

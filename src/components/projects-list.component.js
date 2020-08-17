@@ -7,16 +7,17 @@ const Project = props => (
 
   <tr>
   <td>{props.project.icode}</td>
-  <td>{props.project.short}</td>
-  <td>{props.project.title}</td>
+  
+  <td >{props.project.short}</td>
   <td>{props.project.authority}</td>
-  <td>{props.project.category}</td>
+  <td >{props.project.projectTeams.map(a=>a.category).join(', ')}</td>
   <td>{props.project.startDate.substring(0,10)}</td>
-  <td></td>
+  <td>{Boolean(props.project.endDate)?props.project.endDate.substring(0,10):''}</td>
+
 
   <td>
 
-  <Link to={"/edit/"+props.project._id}>edit</Link> | <a href="#" onClick={() => { props.deleteProject(props.project._id) }}>delete</a>
+  <Link to={"/edit/"+props.project._id}>edit</Link> | <a href="/#" onClick={() => { props.deleteProject(props.project._id) }}>delete</a>
   </td>
 </tr>
 )
@@ -27,24 +28,47 @@ export default class ProjectsList extends Component {
     constructor(props) {
         super(props);
         this.deleteProject = this.deleteProject.bind(this)
+        this.onChangeFilter = this.onChangeFilter.bind(this);
 
-        this.state = {projects: []}
+        this.state = {projects: [], projectsCopy: []}
     }
 
     componentDidMount() {
 
-        let url = BASE_URL+'/projects/'
+        let url = BASE_URL+'/tests/'
         axios.get(url)
             .then(response => {
-                this.setState({projects: response.data})
+                this.setState({projects: response.data, projectsCopy: response.data})
             })
             .catch((error)=>{
                 console.log(error);
             })
     }
 
+    onChangeFilter(e) {
+      console.log(e.target.value);
+
+      let arr1 = e.target.value.split(',').map((a)=>a.trim());
+      console.log('length',e.target.value.length);
+      let array = this.state.projects.filter((a1)=>(arr1.some((b1)=> a1.projectTeams.some((c1)=>(c1.category==b1))) ))
+      this.setState({
+        projectsCopy : array
+      }, () => (console.log("projects",this.state.projectsCopy)))
+
+
+      if (e.target.value == 0){
+        this.setState({
+          projectsCopy : this.state.projects
+        })
+      }
+    }
+
+
+
+    
+
     deleteProject(id) {
-        let url = BASE_URL + '/projects/' +id
+        let url = BASE_URL + '/tests/' +id
         axios.delete(url)
           .then(response => { console.log(response.data)});
 
@@ -54,7 +78,7 @@ export default class ProjectsList extends Component {
       }
 
       projectsList() {
-        return this.state.projects.map((currentProject)=>{
+        return this.state.projectsCopy.map((currentProject)=>{
           return <Project project={currentProject} deleteProject={this.deleteProject} key ={currentProject._id}/>
         }
         )
@@ -63,19 +87,32 @@ export default class ProjectsList extends Component {
     render() {
         return (
             <div>
+               <div className="form-group"> 
+                <label style={{'font-weight': 'bold', marginRight: 5}}>Filter: </label>
+              <input onChange={this.onChangeFilter}></input>
+              </div>
               <h3>Logged Projects</h3>
               <table className="table">
                 <thead className="thead-light">
+
                   <tr>
-                    <th>Ilida Code</th>
-                    <th>Short Title</th>
-                    <th>Title</th>
-                    <th>Authrority</th>
-                    <th>Categories</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Actions</th>
+
+                    <th style={{width: "5%"}}>Code</th>
+
+                    <th style={{width: "20%"}}>Short Title</th>
+
+                    <th style={{width: "20%"}}>Authrority</th>
+
+                    <th style={{width: "10%" ,'textAlign':'right'}}>Categories</th>
+
+                    <th style={{width: "10%",'textAlign':'right'}}>Start Date</th>
+
+                    <th style={{width: "10%",'textAlign':'right'}}>End Date</th>
+
+                    <th style={{'textAlign':'right'}}>Actions</th>
+
                   </tr>
+
                 </thead>
                 <tbody>
                   { this.projectsList() }

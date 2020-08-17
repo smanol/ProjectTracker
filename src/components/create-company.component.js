@@ -10,7 +10,7 @@ const Company = props => (
 
   <td>
 
- <a href="#" onClick={() => { props.deleteCompany(props.company._id) }}>delete</a>
+ <a href="/#" onClick={() => { props.deleteCompany(props.company._id) }}>delete</a>
   </td>
 </tr>
 )
