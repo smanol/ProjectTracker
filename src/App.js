@@ -7,6 +7,7 @@ import ProjectsList from "./components/projects-list.component";
 import EditProject from "./components/edit-project.component";
 import CreateProject from "./components/create-project.component";
 import CreateCompany from "./components/create-company.component";
+import CreateTest from "./components/create-test.component";
 
 
 
@@ -21,6 +22,7 @@ function App() {
       <Route path="/edit/:id" component={EditProject} />
       <Route path="/create" component={CreateProject} />
       <Route path="/company" component={CreateCompany} />
+      <Route path="/test" component={CreateTest} />
       </div>
     </Router>
   );

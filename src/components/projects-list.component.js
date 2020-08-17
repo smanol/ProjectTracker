@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 const Project = props => (
 
   <tr>
@@ -32,7 +32,9 @@ export default class ProjectsList extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:5000/projects/')
+
+        let url = BASE_URL+'/projects/'
+        axios.get(url)
             .then(response => {
                 this.setState({projects: response.data})
             })
@@ -42,7 +44,8 @@ export default class ProjectsList extends Component {
     }
 
     deleteProject(id) {
-        axios.delete('http://localhost:5000/projects/'+id)
+        let url = BASE_URL + '/projects/' +id
+        axios.delete(url)
           .then(response => { console.log(response.data)});
 
         this.setState({
