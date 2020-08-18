@@ -11,6 +11,8 @@ router.route('/').get((req, res) => {
 router.route('/add').post((req, res) => {
   const title = req.body.title;
   const short = req.body.short;
+  const state = req.body.state;
+
   const authority = req.body.authority;
   const description = req.body.description;
   const icode = Number(req.body.icode);
@@ -35,6 +37,7 @@ router.route('/add').post((req, res) => {
     startDate,
     endDate,
     projectTeams,
+    state,
 
   });
 
@@ -66,7 +69,7 @@ router.route('/update/:id').post((req, res) => {
         test.icode = Number(req.body.icode);
         test.startDate = Date.parse(req.body.startDate);
         test.endDate = Date.parse(req.body.endDate)?  Date.parse(req.body.endDate) :null;
-        
+        test.state = req.body.state;
         test.category = req.body.category;
         test.company = req.body.company;
         test.pay =  Number(req.body.pay);

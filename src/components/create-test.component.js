@@ -40,6 +40,15 @@ const categories =
             "27. Περιβαλλοντικές Μελέτες",
             "28. Μελέτες Πληροφορικής και Δικτύων"
         ]
+const states =  
+        [
+            "Διαγωνισμός",
+            "Ανάθεση",
+            "Ενεργό",
+            "Ολοκληρωμένο",
+            "Παύση",
+            "Εκρεμεί",
+        ]
 
 const ProjectTeam = props => (
 
@@ -68,6 +77,7 @@ export default class CreateTest extends Component {
         this.deleteProjectTeam = this.deleteProjectTeam.bind(this)
 
         this.onChangeShort = this.onChangeShort.bind(this);
+        this.onChangeState = this.onChangeState.bind(this);
 
         this.onChangeAuthority = this.onChangeAuthority.bind(this);
 
@@ -105,6 +115,7 @@ export default class CreateTest extends Component {
             percentage: '100 %' ,
             companies: [],
             projectTeams:[],
+            state: states[0]
                 
 
         }
@@ -177,6 +188,11 @@ export default class CreateTest extends Component {
             percentage: e.target.value
         });
     }
+    onChangeState(e) {
+        this.setState({
+            state: e.target.value
+        });
+    }
 
     onSubmit(e) {
         e.preventDefault();
@@ -188,17 +204,18 @@ export default class CreateTest extends Component {
             icode: this.state.icode,
             startDate: this.state.startDate,
             endDate: this.state.endDate,
-            projectTeams: this.state.projectTeams
+            projectTeams: this.state.projectTeams,
+            state: this.state.state
         }
 
         
 
-        console.log(project);
+        console.log("project",project);
 
         axios.post('http://localhost:5000/tests/add', project)
         .then(res => console.log(res.data));
 
-        window.location = '/';
+        // window.location = '/';
     }
 
     onAddTeam(){
@@ -206,7 +223,7 @@ export default class CreateTest extends Component {
         let projectTeam = {
             category: parseInt(this.state.category),
             company: this.state.company,
-            pay: parseFloat(this.state.pay.replace(/\./g,'').replace(',', '.')),
+            pay: this.state.pay? parseFloat(this.state.pay.replace(/\./g,'').replace(',', '.')):'',
             percentage:  parseInt(this.state.percentage),
         }
 
@@ -301,14 +318,18 @@ export default class CreateTest extends Component {
                     <div className="col-sm-3"> 
                     <label>State: </label>
                     <select ref={this.stateInput}
+                        value={this.state.state}
+                        onChange={this.onChangeState}
                         required
                         className="form-control">
-                            <option>Διαγωνισμός</option>
-                            <option>Ανάθεση</option>
-                            <option>Ενεργό</option>
-                            <option>Ολοκληρωμένο</option>
-                            <option>Παύση</option>
-                            <option>Εκρεμεί</option>
+                        {
+                            states.map(function(state) {
+                            return <option 
+                                key={state}
+                                value={state}>{state}
+                                </option>;
+                            })
+                        }
                     </select>
                     </div>
 

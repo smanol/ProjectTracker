@@ -17,10 +17,12 @@ const testSchema = new Schema({
   short: { type: String, required: true },
   authority: { type: String, required: true },
   description: { type: String, required: true },
+  state: {type: String, required: true},
   icode: { type: Number },
   startDate:  { type: Date} ,
   endDate: { type: Date},
-  projectTeams : [projectTeam] 
+  projectTeams : [projectTeam],
+
 
 }, {
   timestamps: true,
